@@ -359,7 +359,7 @@ data "aws_iam_policy_document" "sql_server_s3_permissions_base" {
   statement {
     sid       = "AllowKMSActions"
     effect    = "Allow"
-    resources = concat([aws_kms_key.cmk.*.arn], var.kms_key_arns)
+    resources = join("", concat([aws_kms_key.cmk.*.arn], var.kms_key_arns))
 
     actions = [
       "kms:DescribeKey",
