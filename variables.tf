@@ -9,6 +9,11 @@ variable "cmk_multi_region" {
   description = "Create CMK as a multi-region key"
   default     = false
 }
+variable "enabled_kms" {
+  type        = bool
+  description = "Create CMK key"
+  default     = true
+}
 
 variable "cmk_allowed_aws_account_ids" {
   type        = list(string)
