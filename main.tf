@@ -10,7 +10,6 @@ resource "aws_kms_key" "cmk" {
 }
 
 resource "aws_kms_alias" "cmk" {
-  count         = var.enabled_kms ? 1 : 0
   name          = var.cmk_alias
   target_key_id = aws_kms_key.cmk.key_id
 }
