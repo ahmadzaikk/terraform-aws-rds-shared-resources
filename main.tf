@@ -1,6 +1,7 @@
 data "aws_caller_identity" "this" {}
 
 resource "aws_kms_key" "cmk" {
+  count                    = var.enabled_kms ? 1 : 0
   description              = "CMK for RDS storage encryption"
   key_usage                = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
@@ -10,6 +11,7 @@ resource "aws_kms_key" "cmk" {
 }
 
 resource "aws_kms_alias" "cmk" {
+  count                    = var.enabled_kms ? 1 : 0
   name          = var.cmk_alias
   target_key_id = aws_kms_key.cmk.key_id
 }
