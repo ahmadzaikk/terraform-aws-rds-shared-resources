@@ -1,7 +1,6 @@
 data "aws_caller_identity" "this" {}
 
 resource "aws_kms_key" "cmk" {
-  count                    = var.enabled_kms ? 1 : 0
   description              = "CMK for RDS storage encryption"
   key_usage                = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
@@ -13,7 +12,7 @@ resource "aws_kms_key" "cmk" {
 resource "aws_kms_alias" "cmk" {
   count         = var.enabled_kms ? 1 : 0
   name          = var.cmk_alias
-  target_key_id = aws_kms_key.cmk.*.key_id
+  target_key_id = aws_kms_key.cmk.key_id
 }
 
 data "aws_iam_policy_document" "cmk" {
@@ -359,7 +358,7 @@ data "aws_iam_policy_document" "sql_server_s3_permissions_base" {
   statement {
     sid       = "AllowKMSActions"
     effect    = "Allow"
-    resources = concat([aws_kms_key.cmk.*.arn], var.kms_key_arns)
+    resources = concat([aws_kms_key.cmk.arn], var.kms_key_arns)
 
     actions = [
       "kms:DescribeKey",
